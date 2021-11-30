@@ -5,7 +5,7 @@ DAY=0
 print_usage() {
    echo "Generate the aws-export and version file"
    echo
-   echo "Syntax: prebuild [-d|h]"
+   echo "Syntax: add-day [-d|h]"
    echo "options:"
    echo "d     specify day"
    echo "h     Print this Help"
