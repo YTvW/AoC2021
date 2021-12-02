@@ -24,3 +24,5 @@ echo $DAY
 mkdir day${DAY}
 cp ./scripts/template-data/dayX-part1.py day${DAY}/day${DAY}-part1.py
 cp ./scripts/template-data/dayX-part1.py day${DAY}/day${DAY}-part2.py
+cd day${DAY}
+touch test.txt
