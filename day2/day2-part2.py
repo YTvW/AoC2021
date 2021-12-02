@@ -1,6 +1,4 @@
-import sys
 import fileinput
-from re import search
 import time
 startTime = time.time()
 p1=0
@@ -20,7 +18,6 @@ for line in fileinput.input("./input2.txt"):
     elif cmd == 'u':
       aim -= val
 
-print(p1,p2)
 print('Result: %s' %  (p1*p2))
 
 print("--- %s seconds ---" % (time.time() - startTime))
