@@ -32,23 +32,22 @@ for line in fileinput.input('./'+fileName+'.txt'):
     for i in range(0,dataLen,1):
       if cleanLine[i] == '1':
         bits[i] +=1
-print(dataLen)
+
 for bit in range(0,dataLen,1):
-  # print(bits[bit],lines/2)
+  print(bits[bit],lines/2)
   if bits[bit] > (lines/2):
     gamma = gamma | (1<<dataLen-bit)
     epsilon = epsilon & ~(1<<bit)
   else:
     gamma = gamma & ~(1<<dataLen-bit)
     epsilon = epsilon | (1<<bit)
-  print('gamma:',bin((gamma>>1)))
 
 gamma = gamma>>1
 epsilon = gamma ^ 0xFFF
 
-print('gammaBin:  ',bin((gamma)))
-print('epsilonBin:',bin((~gamma)))
-print('gamma:',int(gamma))
-print('epsilon:',int(epsilon ))
+# print('gammaBin:  ',bin((gamma)))
+# print('epsilonBin:',bin((~gamma)))
+# print('gamma:',int(gamma))
+# print('epsilon:',int(epsilon ))
 print('result: %d'% (gamma*epsilon) )
 print("--- %s seconds ---" % (time.time() - startTime))
