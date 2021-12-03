@@ -23,20 +23,9 @@ for line in fileinput.input('./'+fileName+'.txt'):
     
     cleanLine = line.strip("\n")
     lines+=1
-    # print(cleanLine)
     if dataLen == 0:
       dataLen=len(cleanLine)
-      # for i in range(0,dataLen,1):
-      #   bits[i] =0
-    # for i in range(0,dataLen,1):
-    #   if cleanLine[i] == '1':
-    #     bits[i] +=1
     data.append(cleanLine)
-        # bitLines1[i].append(cleanLine)
-      # else:
-        # bitLines0[i].append(cleanLine)
-
-# print(data)
 
 def countBits(data):
   bits={}
@@ -51,18 +40,11 @@ def countBits(data):
 def determineCo2(data,bit):
   bits = countBits(data)
   tempData = []
-  # print(bits)
-  # print(bits[bit] >= (len(data)/2))
   if bits[bit] >= (len(data)/2):
-    # print('1')
     tempData = list(filter(lambda x: x[bit] =='0',data))
-    
   else:
     tempData = list(filter(lambda x: x[bit] =='1',data))
-    # print('0')
-  # print(bit)
-  # print(data)
-  # print(tempData)
+    
   if len(tempData)==1:
     return int(tempData[0],2)
   else:
@@ -71,18 +53,11 @@ def determineCo2(data,bit):
 def determineOxygen(data,bit):
   bits = countBits(data)
   tempData = []
-  # print(bits)
-  # print(bits[bit] >= (len(data)/2))
   if bits[bit] >= (len(data)/2):
-    # print('1')
     tempData = list(filter(lambda x: x[bit] =='1',data))
-    
   else:
     tempData = list(filter(lambda x: x[bit] =='0',data))
-    # print('0')
-  # print(bit)
-  # print(data)
-  # print(tempData)
+    
   if len(tempData)==1:
     return int(tempData[0],2)
   else:
