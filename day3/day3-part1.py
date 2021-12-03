@@ -45,9 +45,5 @@ for bit in range(0,dataLen,1):
 gamma = gamma>>1
 epsilon = gamma ^ 0xFFF
 
-# print('gammaBin:  ',bin((gamma)))
-# print('epsilonBin:',bin((~gamma)))
-# print('gamma:',int(gamma))
-# print('epsilon:',int(epsilon ))
 print('result: %d'% (gamma*epsilon) )
 print("--- %s seconds ---" % (time.time() - startTime))
