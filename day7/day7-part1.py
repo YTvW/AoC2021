@@ -1,7 +1,7 @@
 import sys
 import fileinput
 import time
-from statistics import mode, median
+from statistics import median
 
 if len(sys.argv) >=2:
   fileName = sys.argv[1]
@@ -10,12 +10,12 @@ else:
 
 positions =[]
 
-startTime = time.time()
+
 for line in fileinput.input('./'+fileName+'.txt'):
     cleanLine = line.strip("\n")
     positions=list(map(lambda pos: int(pos),cleanLine.split(',')))
 
-
+startTime = time.time()
 avgCommonpos = int(median(positions))
 fuelUsed = sum(list(map(lambda pos: abs(avgCommonpos-pos) ,positions)))
 print('result: ',fuelUsed)
