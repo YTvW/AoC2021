@@ -1,13 +1,13 @@
 import sys
 import fileinput
 import time
-
+from math import floor
 if len(sys.argv) >=2:
   fileName = sys.argv[1]
 else:
   fileName = "input"
 
-totalScore=0
+totalScores=[]
 failedLines=[]
 startTime = time.time()
 
@@ -17,41 +17,44 @@ for line in fileinput.input('./'+fileName+'.txt'):
     groups =[]
     cleanLine = line.strip("\n")
     failedChar = ''
-    if  True: #len(cleanLine) % 2 == 0:
-      for i in range(len(cleanLine)):
-        if cleanLine[i] in groupsOpeners.keys():
-          # groups[cleanLine[i]]+=1
-          groups.append(cleanLine[i])
-        elif cleanLine[i] == ']':
-            if groups[-1] == '[':
-              groups.pop(-1)
-            else:
-              failedChar = cleanLine[i]
-              break
-        elif cleanLine[i] == '}':
-            if groups[-1] == '{':
-              groups.pop(-1)
-            else:
-              failedChar = cleanLine[i]
-              break
-        elif cleanLine[i] == ')':
-            if groups[-1] == '(':
-              groups.pop(-1)
-            else:
-              failedChar = cleanLine[i]
-              break
-        elif cleanLine[i] == '>':
-            if groups[-1] == '<':
-              groups.pop(-1)
-            else:
-              failedChar = cleanLine[i]
-              break
-      
+    for i in range(len(cleanLine)):
+      if cleanLine[i] in groupsOpeners.keys():
+        groups.append(cleanLine[i])
+      elif cleanLine[i] == ']':
+          if groups[-1] == '[':
+            groups.pop(-1)
+          else:
+            failedChar = cleanLine[i]
+            break
+      elif cleanLine[i] == '}':
+          if groups[-1] == '{':
+            groups.pop(-1)
+          else:
+            failedChar = cleanLine[i]
+            break
+      elif cleanLine[i] == ')':
+          if groups[-1] == '(':
+            groups.pop(-1)
+          else:
+            failedChar = cleanLine[i]
+            break
+      elif cleanLine[i] == '>':
+          if groups[-1] == '<':
+            groups.pop(-1)
+          else:
+            failedChar = cleanLine[i]
+            break
     if failedChar != '':
-      
-      failedLines.append(cleanLine)
-      totalScore+= groupsClosers[failedChar]
       failedChar = ''
-   
-print('result: ',totalScore)
+    else:
+      scores ={'{':3,'[':2,'<':4,'(':1}
+      tempScore=0
+      groups.reverse()
+      for entry in groups:
+        tempScore= tempScore*5 + scores[entry]
+
+      totalScores.append(tempScore)
+      # print('\n')
+totalScores.sort()
+print('result: ',totalScores[floor(len(totalScores)/2)])
 print("--- %s seconds ---" % (time.time() - startTime))
