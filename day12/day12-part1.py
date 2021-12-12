@@ -7,20 +7,18 @@ if len(sys.argv) >=2:
 else:
   fileName = "input"
 
-def find_paths(caves, start, end, paths=[],path=[]):
-        # paths =[]
+
+def find_all_paths(graph, start, end, path=[]):
         path = path + [start]
         if start == end:
-            return path
-        # print(caves[start][0].isupper())
-        for node in caves[start]:
-            print(node)
+            return [path]
+        paths = []
+        for node in graph[start]:
             if node not in path or (node in path and node.isupper()):
-                newpath = find_paths(caves, node, end,paths, path)
-                if newpath: 
-                  return newpath
-        # print(paths)
-        
+                newpaths = find_all_paths(graph, node, end, path)
+                for newpath in newpaths:
+                  paths.append(newpath)
+        return paths
 
 caves ={}
 paths= []
@@ -33,9 +31,7 @@ for line in fileinput.input('./'+fileName+'.txt'):
     if c2 in caves: caves[c2].append(c1)
     else: caves[c2] = [c1]
 
-print('caves: ',caves)
-# for nodes in caves['start']:
-paths.extend(find_paths(caves,'start','end',[],[]))
-
-print(paths)
+# print('caves: ',caves)
+paths = find_all_paths(caves,'start','end')
+print('results: ',len(paths))
 print("--- %s seconds ---" % (time.time() - startTime))
