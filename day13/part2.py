@@ -45,7 +45,6 @@ def print_grid(coordinates):
   for y in range(0,maxY+1):
     ys=[]
     for x in range(0,maxX+1):
-      
       try:
         ys.append(coordinates[(x,y)])
       except:
