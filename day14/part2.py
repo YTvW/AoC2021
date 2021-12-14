@@ -2,14 +2,14 @@ import sys
 import fileinput
 import time
 from copy import deepcopy
-from typing import Counter
+from collections import Counter, defaultdict
 from math import ceil
 if len(sys.argv) >=2:
   fileName = sys.argv[1]
 else:
   fileName = "input"
 
-polymerBase ={}
+polymerBase =defaultdict(int)
 pir={}
 startLine=''
 startTime = time.perf_counter()
@@ -22,7 +22,7 @@ for line in fileinput.input('./'+fileName+'.txt'):
       pir[pair]=[(list(pair)[0]+sub),(sub+list(pair)[1])]
       polymerBase[pair]=0
 
-polymerTemplate = deepcopy(polymerBase)
+# polymerTemplate = deepcopy(polymerBase)
 
 for i,val in enumerate(startLine):
       try:
@@ -31,25 +31,19 @@ for i,val in enumerate(startLine):
         break
 
 for steps in range(40):
-  tempDict= deepcopy(polymerTemplate)
+  tempDict= defaultdict(int)
   for k,val in polymerBase.items():
     for pair in pir[k]:
         # print(pair)
         tempDict[pair]+= val
   polymerBase = deepcopy(tempDict)
 
-counts={}
+counts=defaultdict(int)
 for k,val in polymerBase.items():
   char1,char2 = list(k)
-  try:  
-    counts[char1]+=val
-  except:
-    counts[char1]=val
-  try:
-    counts[char2]+=val
-  except:
-    counts[char2]=val
-
+  counts[char1]+=val
+  counts[char2]+=val
+  
 counters =Counter(counts)
 common = counters.most_common()
 print('result: ',ceil(common[0][1]/2)-ceil(common[-1][1]/2))
