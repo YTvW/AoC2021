@@ -65,7 +65,7 @@ def decodeBytes(data,level=0):
         offset+=usedBytes
         versions.extend(newVersion)
   print(versions,packetType)
-  input("Press Enter to continue...")
+  # input("Press Enter to continue...")
 
   return offset,versions
 
