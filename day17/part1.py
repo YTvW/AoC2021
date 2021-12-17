@@ -33,7 +33,6 @@ def steps(pos,speed,target):
 
   return step, posInTarget,maxY
   
-
 target=[]
 for line in fileinput.input('./'+fileName+'.txt'):
     cleanLine = line.strip("\n")
