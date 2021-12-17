@@ -1,7 +1,7 @@
 import sys
 import fileinput
 import time
-from math import floor
+from math import floor, prod
 if len(sys.argv) >=2:
   fileName = sys.argv[1]
 else:
@@ -27,14 +27,97 @@ hexToBinMap={
 }
 
 def decodeBytes(data,level=0):
-  versions=[]
   offset = 0
   packetVersion = int(data[offset:offset+3],2)
-  versions.append(packetVersion)
   offset+=3
   packetType = int(data[offset:offset+3],2)
   offset+=3
-  if packetType == 4:
+  value=None
+  if packetType == 0:
+    lengthTypeId = int(data[offset])
+    offset+=1
+    values =[]
+    if lengthTypeId == 0:
+      bitsInsSubPackets = int(data[offset:offset+15],2)
+      offset+=15
+      used=0
+      while used < bitsInsSubPackets:
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+        used+=usedBytes
+    else:
+      nrOfSubPackets = int(data[offset:offset+11],2)
+      offset+=11
+      for i in range(nrOfSubPackets):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+    value = sum(values)
+  elif packetType == 1:
+    lengthTypeId = int(data[offset])
+    offset+=1
+    values =[]
+    if lengthTypeId == 0:
+      bitsInsSubPackets = int(data[offset:offset+15],2)
+      offset+=15
+      used=0
+      while used < bitsInsSubPackets:
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+        used+=usedBytes
+    else:
+      nrOfSubPackets = int(data[offset:offset+11],2)
+      offset+=11
+      for i in range(nrOfSubPackets):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+    value = prod(values)
+  elif packetType == 2:
+    lengthTypeId = int(data[offset])
+    offset+=1
+    values =[]
+    if lengthTypeId == 0:
+      bitsInsSubPackets = int(data[offset:offset+15],2)
+      offset+=15
+      used=0
+      while used < bitsInsSubPackets:
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+        used+=usedBytes
+    else:
+      nrOfSubPackets = int(data[offset:offset+11],2)
+      offset+=11
+      for i in range(nrOfSubPackets):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+    value = min(values)
+  elif packetType == 3:
+    lengthTypeId = int(data[offset])
+    offset+=1
+    values =[]
+    if lengthTypeId == 0:
+      bitsInsSubPackets = int(data[offset:offset+15],2)
+      offset+=15
+      used=0
+      while used < bitsInsSubPackets:
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+        used+=usedBytes
+    else:
+      nrOfSubPackets = int(data[offset:offset+11],2)
+      offset+=11
+      for i in range(nrOfSubPackets):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+    value = max(values)
+  elif packetType == 4:
     resultString=""
     busy = True
     while busy:
@@ -44,41 +127,88 @@ def decodeBytes(data,level=0):
         offset+=5
         break
       offset+=5
-  elif packetType == 4:
-  else:
+    value = int(resultString,2)
+  elif packetType == 5:
     lengthTypeId = int(data[offset])
     offset+=1
+    values =[]
     if lengthTypeId == 0:
       bitsInsSubPackets = int(data[offset:offset+15],2)
       offset+=15
       used=0
       while used < bitsInsSubPackets:
-        usedBytes,newVersion = decodeBytes(data[offset::],level+1)
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
         offset+=usedBytes
         used+=usedBytes
-        versions.extend(newVersion)
     else:
       nrOfSubPackets = int(data[offset:offset+11],2)
       offset+=11
-      for i in range(nrOfSubPackets):
-        usedBytes,newVersion =decodeBytes(data[offset::],level+1)
+      for i in range(2):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
         offset+=usedBytes
-        versions.extend(newVersion)
-  print(versions,packetType)
-  input("Press Enter to continue...")
-
-  return offset,versions
+    if values[0]> values[1]:
+      value = 1
+    else:
+      value=0
+  elif packetType == 6:
+    lengthTypeId = int(data[offset])
+    offset+=1
+    values =[]
+    if lengthTypeId == 0:
+      bitsInsSubPackets = int(data[offset:offset+15],2)
+      offset+=15
+      used=0
+      while used < bitsInsSubPackets:
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+        used+=usedBytes
+    else:
+      nrOfSubPackets = int(data[offset:offset+11],2)
+      offset+=11
+      for i in range(2):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+    if values[0] < values[1]:
+      value = 1
+    else:
+      value=0
+  elif packetType == 7:
+    lengthTypeId = int(data[offset])
+    offset+=1
+    values =[]
+    if lengthTypeId == 0:
+      bitsInsSubPackets = int(data[offset:offset+15],2)
+      offset+=15
+      used=0
+      while used < bitsInsSubPackets:
+        usedBytes,value = decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+        used+=usedBytes
+    else:
+      nrOfSubPackets = int(data[offset:offset+11],2)
+      offset+=11
+      for i in range(2):
+        usedBytes,value =decodeBytes(data[offset::],level+1)
+        values.append(value)
+        offset+=usedBytes
+    if values[0] == values[1]:
+      value = 1
+    else:
+      value=0
+  return offset, value
 
 fullData =""
 startTime = time.time()
 for line in fileinput.input('./'+fileName+'.txt'):
     cleanLine = line.strip("\n")
-    # print(cleanLine)
+    fullData =""
     for char in cleanLine:
       fullData += hexToBinMap[char]
-
-    # print (fullData)
-    offset,versions = decodeBytes(fullData)
-    # print(offset,versions)
-    print('result: ',sum(versions))
+    offset,result = decodeBytes(fullData)
+    print('result: ',result)
 print("--- %s seconds ---" % (time.time() - startTime))

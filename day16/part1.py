@@ -44,7 +44,7 @@ def decodeBytes(data,level=0):
         offset+=5
         break
       offset+=5
-  
+      
   else:
     lengthTypeId = int(data[offset])
     offset+=1
