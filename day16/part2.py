@@ -1,7 +1,7 @@
 import sys
 import fileinput
 import time
-from math import floor, prod
+from math import prod
 if len(sys.argv) >=2:
   fileName = sys.argv[1]
 else:
@@ -33,91 +33,7 @@ def decodeBytes(data,level=0):
   packetType = int(data[offset:offset+3],2)
   offset+=3
   value=None
-  if packetType == 0:
-    lengthTypeId = int(data[offset])
-    offset+=1
-    values =[]
-    if lengthTypeId == 0:
-      bitsInsSubPackets = int(data[offset:offset+15],2)
-      offset+=15
-      used=0
-      while used < bitsInsSubPackets:
-        usedBytes,value = decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-        used+=usedBytes
-    else:
-      nrOfSubPackets = int(data[offset:offset+11],2)
-      offset+=11
-      for i in range(nrOfSubPackets):
-        usedBytes,value =decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-    value = sum(values)
-  elif packetType == 1:
-    lengthTypeId = int(data[offset])
-    offset+=1
-    values =[]
-    if lengthTypeId == 0:
-      bitsInsSubPackets = int(data[offset:offset+15],2)
-      offset+=15
-      used=0
-      while used < bitsInsSubPackets:
-        usedBytes,value = decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-        used+=usedBytes
-    else:
-      nrOfSubPackets = int(data[offset:offset+11],2)
-      offset+=11
-      for i in range(nrOfSubPackets):
-        usedBytes,value =decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-    value = prod(values)
-  elif packetType == 2:
-    lengthTypeId = int(data[offset])
-    offset+=1
-    values =[]
-    if lengthTypeId == 0:
-      bitsInsSubPackets = int(data[offset:offset+15],2)
-      offset+=15
-      used=0
-      while used < bitsInsSubPackets:
-        usedBytes,value = decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-        used+=usedBytes
-    else:
-      nrOfSubPackets = int(data[offset:offset+11],2)
-      offset+=11
-      for i in range(nrOfSubPackets):
-        usedBytes,value =decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-    value = min(values)
-  elif packetType == 3:
-    lengthTypeId = int(data[offset])
-    offset+=1
-    values =[]
-    if lengthTypeId == 0:
-      bitsInsSubPackets = int(data[offset:offset+15],2)
-      offset+=15
-      used=0
-      while used < bitsInsSubPackets:
-        usedBytes,value = decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-        used+=usedBytes
-    else:
-      nrOfSubPackets = int(data[offset:offset+11],2)
-      offset+=11
-      for i in range(nrOfSubPackets):
-        usedBytes,value =decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-    value = max(values)
-  elif packetType == 4:
+  if packetType == 4:
     resultString=""
     busy = True
     while busy:
@@ -128,7 +44,7 @@ def decodeBytes(data,level=0):
         break
       offset+=5
     value = int(resultString,2)
-  elif packetType == 5:
+  else:
     lengthTypeId = int(data[offset])
     offset+=1
     values =[]
@@ -144,65 +60,35 @@ def decodeBytes(data,level=0):
     else:
       nrOfSubPackets = int(data[offset:offset+11],2)
       offset+=11
-      for i in range(2):
+      for i in range(nrOfSubPackets):
         usedBytes,value =decodeBytes(data[offset::],level+1)
         values.append(value)
         offset+=usedBytes
-    if values[0]> values[1]:
-      value = 1
-    else:
-      value=0
-  elif packetType == 6:
-    lengthTypeId = int(data[offset])
-    offset+=1
-    values =[]
-    if lengthTypeId == 0:
-      bitsInsSubPackets = int(data[offset:offset+15],2)
-      offset+=15
-      used=0
-      while used < bitsInsSubPackets:
-        usedBytes,value = decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-        used+=usedBytes
-    else:
-      nrOfSubPackets = int(data[offset:offset+11],2)
-      offset+=11
-      for i in range(2):
-        usedBytes,value =decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-    if values[0] < values[1]:
-      value = 1
-    else:
-      value=0
-  elif packetType == 7:
-    lengthTypeId = int(data[offset])
-    offset+=1
-    values =[]
-    if lengthTypeId == 0:
-      bitsInsSubPackets = int(data[offset:offset+15],2)
-      offset+=15
-      used=0
-      while used < bitsInsSubPackets:
-        usedBytes,value = decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-        used+=usedBytes
-    else:
-      nrOfSubPackets = int(data[offset:offset+11],2)
-      offset+=11
-      for i in range(2):
-        usedBytes,value =decodeBytes(data[offset::],level+1)
-        values.append(value)
-        offset+=usedBytes
-    if values[0] == values[1]:
-      value = 1
-    else:
-      value=0
+    if packetType == 0:
+          value = sum(values)
+    elif packetType == 1:
+          value = prod(values)
+    elif packetType == 2:
+          value = min(values)
+    elif packetType == 3:
+          value = max(values)
+    elif packetType == 5:
+      if values[0]> values[1]:
+        value = 1
+      else:
+        value=0
+    elif packetType == 6:
+      if values[0] < values[1]:
+       value = 1
+      else:
+        value=0
+    elif packetType == 7:
+      if values[0] == values[1]:
+        value = 1
+      else:
+        value=0
   return offset, value
 
-fullData =""
 startTime = time.time()
 for line in fileinput.input('./'+fileName+'.txt'):
     cleanLine = line.strip("\n")
