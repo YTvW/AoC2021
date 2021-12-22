@@ -22,7 +22,7 @@ for line in fileinput.input('./'+fileName+'.txt'):
 startTime = time.time()
 while p1Score < 1000 and p2Score <1000:
   #do role else break
-  # p1
+  # p1 
   rolled = diceRoll +(diceRoll+1)+(diceRoll+2)
   
   p1 =  (p1 + rolled)%10
